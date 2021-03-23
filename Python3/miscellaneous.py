@@ -1,5 +1,6 @@
 #!/bin/python3
-
+import logging
+from os import remove, path
 # This file shall contain miscellaneous functions and data structures :
 # 1. Function to calculate md5sums of Images/Files/Gifs
 # 2. Dictionaries of Important hashes
@@ -20,3 +21,43 @@ class fmt :
     BOLD='\033[1m'
     BLINK='\033[5m'
     UNDERLINE='\033[4m'
+
+# Wrapper Around logging module 
+class logthis :
+    def __init__(self):
+        logging.basicConfig(level=logging.DEBUG,filename="socio-terminal.log",format="%(asctime)s [%(levelname)s] - [%(filename)s > %(funcName)s() > %(lineno)s] - %(message)s",datefmt="%H:%M:%S")
+
+    def debug(self,msg):
+        logging.debug(msg)
+
+    def info(self,msg):
+           logging.info(msg)
+    
+    def warning(self,msg):
+           logging.warning(msg)
+    
+    def error(self,msg):
+           logging.error(msg)
+
+    def critical(self,msg):
+           logging.critical(msg)
+
+# Delete A File
+def rm(filename):
+    logger=logthis()
+    try :
+        if(path.isfile(filename)):
+            remove(filename)
+            logger.info(f"Removed {filename}")
+            return 0 # Signifies Successful Deletion
+        else :
+            logger.error(f"{filename} Not Found")
+            return -1 # Signifies that file does not exist in Path
+    except Exception as e :
+        logger.error(f"Error Occured While Deleteing : {filename}")
+        logger.error(f"Error : {e}")
+        return -99 # Signifies error in deleteinf=g
+            
+        
+        
+    
