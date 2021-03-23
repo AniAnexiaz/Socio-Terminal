@@ -1,4 +1,5 @@
 #!/bin/python3
+from subprocess import check_output
 import logging
 from os import remove, path
 # This file shall contain miscellaneous functions and data structures :
@@ -52,7 +53,8 @@ def rm(filename):
         logger.error(f"Error Occured While Deleteing : {filename}")
         logger.error(f"Error : {e}")
         return -99 # Signifies error in deleteinf=g
-            
-        
-        
-    
+
+def md5sum(filename):
+    logger=logthis()
+    output = check_output(f"md5sum {filename}", shell=True).decode().strip().split("  ")
+    logger.info(f"Calculated MD5SUM of {output[1]} as {output[0]}")
