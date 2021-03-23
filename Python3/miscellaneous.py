@@ -26,19 +26,14 @@ class fmt :
 class logthis :
     def __init__(self):
         logging.basicConfig(level=logging.DEBUG,filename="socio-terminal.log",format="%(asctime)s [%(levelname)s] - [%(filename)s > %(funcName)s() > %(lineno)s] - %(message)s",datefmt="%H:%M:%S")
-
     def debug(self,msg):
         logging.debug(msg)
-
     def info(self,msg):
            logging.info(msg)
-    
     def warning(self,msg):
            logging.warning(msg)
-    
     def error(self,msg):
            logging.error(msg)
-
     def critical(self,msg):
            logging.critical(msg)
 
