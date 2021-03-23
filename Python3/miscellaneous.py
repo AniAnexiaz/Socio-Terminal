@@ -61,7 +61,20 @@ def md5sum(filename):
     if(path.isfile(filename)):
         output = check_output(f"md5sum {filename}", shell=True).decode().strip().split("  ")
         logger.info(f"Calculated MD5SUM of {output[1]} as {output[0]}")
-        return ouput
+        return output
     else :
         logger.error(f"{filename} Not Found")
         return output
+
+# Return Logs Created By The Program
+def readlog() :
+    logger=logthis()
+    logfile="socio-terminal.log"
+    if(path.isfile(logfile)):
+        logger.info(f"Reading Log-File : {logfile}")
+        f = open(logfile, "r")
+        return f.read()
+    else :
+        logger.error(f"{logfile} Not Found")
+        return ""
+    
