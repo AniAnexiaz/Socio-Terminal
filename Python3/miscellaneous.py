@@ -54,7 +54,14 @@ def rm(filename):
         logger.error(f"Error : {e}")
         return -99 # Signifies error in deleteinf=g
 
+# Function to calculate md5sum of Files and return a list of the format {MD5SUM, FILENAME}
 def md5sum(filename):
     logger=logthis()
-    output = check_output(f"md5sum {filename}", shell=True).decode().strip().split("  ")
-    logger.info(f"Calculated MD5SUM of {output[1]} as {output[0]}")
+    output=list()
+    if(path.isfile(filename)):
+        output = check_output(f"md5sum {filename}", shell=True).decode().strip().split("  ")
+        logger.info(f"Calculated MD5SUM of {output[1]} as {output[0]}")
+        return ouput
+    else :
+        logger.error(f"{filename} Not Found")
+        return output
