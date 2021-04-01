@@ -14,11 +14,12 @@
 
 
 import discord
-#import requests
+import requests
 #import json
 #import random
 from discord.ext import commands
 import subprocess
+#import urllib
 #from decouple import config
 import os
 #import youtube_dl
@@ -39,9 +40,19 @@ ID=int(824362867657801779)
 
 bot=commands.Bot(command_prefix="!")
 
+#To download a sent image
+def download(url,path):
+
+    #We get a response object from the URL. This object further has attributes which help us navigate the different functionalities of the page.
+    r=requests.get(url)
+
+    #r.content contains the bytes of the image, so when we write that into a file, it is interpreted as an image
+    #'wb' mode stands for write-bytes
+    with open(path,'wb') as f:
+        f.write(r.content)
+
+#To calculate the md5sum of a sent image
 def md5sum(a):
-    os.chdir('/home/vader/Downloads/')
-    
     args=f"md5sum {a}"
     #Shell=True means the args command is executed by using a shell. The stdout(output) and stderr(error) pipes are combined as per subprocess documentation
     process= subprocess.Popen(args,shell=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
@@ -75,10 +86,18 @@ async def on_message(message):
             attach=attachments[0].url
             await message.channel.send(attach)
 
-            '''
-            "Download attach in a specific folder and name the image as imageee.jpg."
-            #await message.channel.send(file=discord.File('/path/to/imageee.jpg'))
-            output2=md5sum(/path/to/imageee.jpg)
+            your_path='/home/vader/Downloads/'
+            name='fileee'
+            #The message.attachment object url has some some special characters at the end which the browser can't seem to parse (like %27%). So we remove that portion
+            url=attach.split('%')[0]
+            path=str(your_path+name)
+            download(url,path)
+        
+            output2=md5sum(path)
+            await message.channel.send(output2)
+
+            os.remove(path)
+        '''     
             if output2 in dictionary.keys():
                 command=str(dictionary[output2])
                 process2= subprocess.Popen(command,shell=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
@@ -98,23 +117,6 @@ async def print(ctx, *args):
     for arg in args:
         output=output + " " + arg
     await ctx.channel.send(output)
-
-'''
-#Calculating the md5sum of any image sent to the server
-@bot.command()
-async def image(ctx, arg):
-    "Download arg in a specific folder and name the image arg as imageee.jpg."
-    output2=md5sum(imageee.jpg)
-
-    if output2 in dictionary.keys():
-        command=str(dictionary[output2])
-        process2= subprocess.Popen(command,shell=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
-        output3= process2.stdout.read().decode()
-        
-        await ctx.channel.send(output3)
-    else:
-        await ctx.channel.send("The md5sum is not present in the dictionary.")
-'''
+    
 
 bot.run("TOKEN")
-
